@@ -232,7 +232,7 @@ head {
 }
 
 .result-item[data-state="active"] {
-  display: inline-block;;
+  display: inline-block;
 }
 
 .result {
