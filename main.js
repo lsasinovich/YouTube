@@ -15,8 +15,10 @@ function carouselShow(num) {
         indicators[num].checked = true;
 
         for (var i = 0; i<itemsCount; i++) {
+          if (num*itemsCount + i < slides.length) {
             slides[num*itemsCount + i].setAttribute('data-state', 'active');
-            slides[num*itemsCount+i].style.display = 'inline-block';
+            slides[num*itemsCount + i].style.display = 'inline-block';
+          }
         }
 }
 
@@ -46,19 +48,19 @@ function addIndicator(start, count, parent) {
 
 function resize() {
     if (window.innerWidth <= 800 && itemsCount == 4) {
-        for (let i = 0; i < 3; i++) {
+        for (let i = indicatorsCount; i < Math.round(slides.length/2); i++) {
             let node = document.createElement("input");
 
             node.setAttribute("class", "indicator");
             node.setAttribute("name", "indicator");
             node.setAttribute("type", "radio");
-            node.setAttribute("data-slide", `${indicatorsCount + i}`);
-            node.addEventListener("click", setSlide(indicatorsCount + i));
+            node.setAttribute("data-slide", `${i}`);
+            node.addEventListener("click", setSlide(i));
 
             indicatorsParent.appendChild(node);
         }
         itemsCount = 2;
-        indicatorsCount = Math.ceil(slides.length/itemsCount);
+        indicatorsCount = indicators.length;
 
         for (let i = 0; i < indicatorsCount; i++) {
             if( indicators[i].checked ==  true) {
@@ -71,39 +73,41 @@ function resize() {
 
     if (window.innerWidth > 800 && itemsCount == 2) {
 
-        for (let i = 0; i < 3; i++) {
+      itemsCount = 4;
+
+      for (let i = 0; i < Math.round(slides.length/itemsCount); i++) {
+          if( indicators[i].checked ==  true) {
+              console.log('here')
+              setSlide(Math.round(i/2))();
+              break;
+          }
+      }
+
+       for (let i = indicatorsCount-1; i > Math.round(slides.length/itemsCount)-1; i--) {
             if(indicatorsParent.lastElementChild.checked == true) {
               console.log("ok");
               indicatorsParent.lastElementChild.previousElementSibling.checked = true;
             }
             indicatorsParent.removeChild(indicatorsParent.lastElementChild);
         }
-        itemsCount = 4;
-        indicatorsCount = Math.floor(slides.length/itemsCount);
-
-        for (let i = 0; i < indicatorsCount; i++) {
-            if( indicators[i].checked ==  true) {
-                console.log('here')
-                setSlide(Math.floor(i/2))();
-                break;
-            }
-        }
+        indicatorsCount = indicators.length;
     }
 
     if (window.innerWidth <= 480 && itemsCount == 2) {
-        for (let i = 0; i < 6; i++) {
+        for (let i = indicatorsCount; i < slides.length; i++) {
+          console.log(indicatorsCount);
             let node = document.createElement("input");
 
             node.setAttribute("class", "indicator");
             node.setAttribute("name", "indicator");
             node.setAttribute("type", "radio");
-            node.setAttribute("data-slide", `${indicatorsCount + i}`);
-            node.addEventListener("click", setSlide(indicatorsCount + i));
+            node.setAttribute("data-slide", `${i}`);
+            node.addEventListener("click", setSlide(i));
 
             indicatorsParent.appendChild(node);
         }
         itemsCount = 1;
-        indicatorsCount = Math.ceil(slides.length/itemsCount);
+        indicatorsCount = indicators.length;
 
         for (let i = 0; i < indicatorsCount; i++) {
             if( indicators[i].checked ==  true) {
@@ -116,23 +120,25 @@ function resize() {
 
     if (window.innerWidth > 480 && itemsCount == 1) {
 
-        for (let i = 0; i < 6; i++) {
+      itemsCount = 2;
+
+      for (let i = 0; i <= Math.round(slides.length/itemsCount)-1; i++) {
+          if( indicators[i].checked ==  true) {
+              console.log('here')
+              setSlide(Math.floor(i/2))();
+              break;
+          }
+      }
+
+       for (let i = indicatorsCount-1; i > Math.round(slides.length/itemsCount)-1; i--) {
             if(indicatorsParent.lastElementChild.checked == true) {
               console.log("ok");
               indicatorsParent.lastElementChild.previousElementSibling.checked = true;
             }
             indicatorsParent.removeChild(indicatorsParent.lastElementChild);
         }
-        itemsCount = 2;
-        indicatorsCount = Math.ceil(slides.length/itemsCount);
 
-        for (let i = 0; i < indicatorsCount; i++) {
-            if( indicators[i].checked ==  true) {
-                console.log('here')
-                setSlide(Math.floor(i/2))();
-                break;
-            }
-        }
+        indicatorsCount = indicators.length;
     }
 }
 

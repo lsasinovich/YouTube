@@ -1,6 +1,7 @@
 body {
   position: relative;
-  background-color: #000;
+  height: 100%;
+  background: url("фон.jpg");
   display: flex;
   justify-content: center;
 }
@@ -15,8 +16,8 @@ head {
   width: 80%;
   margin: 5% 10%;
   height: 100%;
-  display: block;
-  background-color: #111;
+  display: inline-block;
+  background-color:#291c1cd9;
   box-shadow: 3px 3px 5px #111;
   position: relative;
 
@@ -33,7 +34,7 @@ head {
   width:100%;
 }
 .search-container {
-  background-color: #111;
+  background-color: #291c1cd9;
   display: flex;
   justify-content: center;
   width: 100%;
@@ -41,6 +42,7 @@ head {
   box-sizing: border-box;
   margin: 25px 0;
   flex-grow: 1;
+  position: relative;
 }
 
 .searchTerm {
@@ -241,17 +243,46 @@ head {
 
 
 @media screen and (max-width: 800px) {
+
+  .search-container {
+    padding: 0 15%;
+  }
+
+  .searchTerm {
+    font-size: 18px;
+  }
+
+  .searchButton {
+    font-size: 18px;
+  }
+
   .result-item {
     width: 45%;
   }
 
   .search-container {
     padding: 0 25%;
-}
+  }
 
 }
 
 @media screen and (max-width: 480px) {
+
+  .searchTerm {
+    font-size: 16px;
+    margin: 0 5px 0 0;
+    padding: 0;
+    display: block;
+  }
+
+  .searchButton {
+    font-size: 16px;
+    margin: 0;
+  }
+  .search-container {
+    padding: 0 0;
+  }
+
   .result-item {
     width: 90%;
     margin-right: 5%;
@@ -260,6 +291,27 @@ head {
 
   .search-container {
     padding: 0 35%;
+  }
+
 }
 
+@media screen and (max-width: 360px) {
+  .searchTerm {
+    flex: 8;
+    font-size: 12px;
+    margin: 0 5px 0 0;
+    padding: 0;
+    display: block;
+  }
+
+  .searchButton {
+    flex: 0.5;
+    padding: 2px;
+    font-size: 12px;
+    margin: 0;
+  }
+  .search-container {
+    padding: 0 35%;
+    margin: 25px 5px;
+  }
 }
