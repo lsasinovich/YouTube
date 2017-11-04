@@ -1,6 +1,7 @@
 body {
   position: relative;
   height: 100%;
+  margin-bottom: 0;
   background: url("фон.jpg");
   display: flex;
   justify-content: center;
@@ -17,9 +18,10 @@ head {
   margin: 5% 10%;
   height: 100%;
   display: inline-block;
-  background-color:#291c1cd9;
+  background-color: rgba(119, 18, 19, 0.34);
   box-shadow: 3px 3px 5px #111;
   position: relative;
+  padding-bottom: 10px;
 
 }
 .header {
@@ -230,7 +232,32 @@ head {
 }
 
 .indicator {
-    cursor: pointer;
+  display: inline-block;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  background-color: rgba(0, 0, 0, 0.72);
+  margin: 0 5px;
+  text-align: center;
+  border-radius: 50%;
+  border: 2px solid #fff;
+}
+
+.indicator span {
+  visibility: hidden;
+  font-size: 16px;
+  font-family: Comic Sans MS;
+}
+
+.indicator[data-state="active"]  {
+  background-color: rgba(122, 9, 32, 0.78);
+  border: 2px solid #fff;
+  visibility: visible;
+}
+
+.indicator[data-state="active"]  span{
+  visibility: visible;
+  color: white;
 }
 
 .result-item[data-state="active"] {
@@ -264,6 +291,17 @@ head {
     padding: 0 25%;
   }
 
+  .indicator {
+    width: 20px;
+    height: 20px;
+  }
+
+  .indicator span {
+    font-size: 14px;
+    font-family: Comic Sans MS;
+  }
+
+
 }
 
 @media screen and (max-width: 480px) {
@@ -293,6 +331,16 @@ head {
     padding: 0 35%;
   }
 
+  .indicator {
+    width: 15px;
+    height: 15px;
+  }
+
+  .indicator span {
+    font-size: 12px;
+    font-family: Comic Sans MS;
+  }
+
 }
 
 @media screen and (max-width: 360px) {
@@ -310,6 +358,12 @@ head {
     font-size: 12px;
     margin: 0;
   }
+
+  .indicator {
+    width: 15px;
+    height: 15px;
+  }
+
   .search-container {
     padding: 0 35%;
     margin: 25px 5px;

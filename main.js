@@ -7,12 +7,13 @@ function carouselHide() {
 
         for (var i = 0; i < indicators.length; i++) {
             indicators[i].setAttribute('data-state', '');
+            indicators[i].setAttribute("checked", "false");
         }
 }
 
 function carouselShow(num) {
         indicators[num].setAttribute('data-state', 'active');
-        indicators[num].checked = true;
+        indicators[num].setAttribute("checked", "true");
 
         for (var i = 0; i < itemsCount; i++) {
           if (num*itemsCount + i < slides.length) {
@@ -33,105 +34,90 @@ function setSlide(slide) {
 }
 
 function resize() {
-    if (window.innerWidth <= 800 && itemsCount == 4) {
+    if (window.innerWidth <= 800 && window.innerWidth > 480 &&  itemsCount == 4) {
       itemsCount = 2;
 
-      for (let i = indicatorsCount; i < Math.round(slides.length/2); i++) {
-          let node = document.createElement("input");
+    for (let i = indicatorsCount; i < Math.round(slides.length/2); i++) {
+          let node = document.createElement("div");
 
           node.setAttribute("class", "indicator");
           node.setAttribute("name", "indicator");
-          node.setAttribute("type", "radio");
-          node.setAttribute("data-slide", `${i}`);
+          node.innerHTML = `<span>${i+1}</span>`;
+          node.setAttribute("checked", "false");
           node.addEventListener("click", setSlide(i));
 
           indicatorsParent.appendChild(node);
       }
 
-      indicatorsCount = indicators.length;
+    indicatorsCount = indicators.length;
 
       for (let i = 0; i < indicatorsCount; i++) {
-          if( indicators[i].checked ==  true) {
+          if( indicators[i].getAttribute("checked") ==  "true") {
               setSlide(i*2)();
               break;
           }
       }
 }
 
-    if (window.innerWidth > 800 && itemsCount == 2) {
+    if (window.innerWidth > 800 && itemsCount != 4) {
       let num;
       itemsCount = 4;
-
-      console.log(indicatorsCount);
-       for (let i = indicatorsCount-1; i > Math.round(slides.length/itemsCount)-1; i--) {
-            if(indicatorsParent.lastElementChild.checked == true) {
-              console.log("ok");
-              indicatorsParent.lastElementChild.previousElementSibling.checked = true;
-              num = i;
-
+       for (let i = 0; i < indicators.length; i++) {
+            if( indicators[i].getAttribute("checked") ==  "true") {
+                num = i;
             }
+        }
+
+       for (let i = indicatorsCount-1; i >= Math.ceil(slides.length/itemsCount); i--) {
             indicatorsParent.removeChild(indicatorsParent.lastElementChild);
         }
         indicatorsCount = indicators.length;
 
-        for (let i = 0; i < Math.round(slides.length/itemsCount); i++) {
-            if( indicators[i].checked ==  true) {
-                console.log('here')
-                num = i;
-            }
-        }
-        setSlide(Math.round(num/2))();
+        setSlide(Math.floor(num/2))();
     }
 
-    if (window.innerWidth <= 480 && itemsCount == 2) {
+    if (window.innerWidth <= 480 && itemsCount != 1) {
       itemsCount = 1;
+      let num;
         for (let i = indicatorsCount; i < slides.length; i++) {
-          console.log(indicatorsCount);
-            let node = document.createElement("input");
 
-            node.setAttribute("class", "indicator");
-            node.setAttribute("name", "indicator");
-            node.setAttribute("type", "radio");
-            node.setAttribute("data-slide", `${i}`);
-            node.addEventListener("click", setSlide(i));
+            let node = document.createElement("div");
 
-            indicatorsParent.appendChild(node);
+          node.setAttribute("class", "indicator");
+          node.setAttribute("name", "indicator");
+          node.innerHTML = `<span>${i+1}</span>`;
+          node.setAttribute("checked", "false")
+          node.addEventListener("click", setSlide(i));
+
+          indicatorsParent.appendChild(node);
         }
 
         indicatorsCount = indicators.length;
 
         for (let i = 0; i < indicatorsCount; i++) {
-            if( indicators[i].checked ==  true) {
-                console.log('here');
+            if( indicators[i].getAttribute("checked") ==  "true") {
                 setSlide(i*2)();
                 break;
             }
         }
     }
 
-    if (window.innerWidth > 480 && itemsCount == 1) {
+    if (window.innerWidth > 480 && window.innerWidth <= 800 &&  itemsCount == 1) {
       let num;
       itemsCount = 2;
-
-       for (let i = indicatorsCount-1; i > Math.round(slides.length/itemsCount)-1; i--) {
-            if(indicatorsParent.lastElementChild.checked == true) {
-              console.log("ok");
-              indicatorsParent.lastElementChild.previousElementSibling.checked = true;
-              num = i;
+        for (let i = 0; i < indicators.length; i++) {
+            if( indicators[i].getAttribute("checked") ==  "true") {
+                num = i;
             }
+        }
+
+       for (let i = indicatorsCount-1; i >= Math.ceil(slides.length/itemsCount); i--) {
             indicatorsParent.removeChild(indicatorsParent.lastElementChild);
         }
 
         indicatorsCount = indicators.length;
 
-        for (let i = 0; i <= Math.round(slides.length/itemsCount)-1; i++) {
-            if( indicators[i].checked ==  true) {
-                console.log('here')
-                num = i;
-            }
-        }
-
-        setSlide(Math.round(num/2))();
+        setSlide(Math.floor(num/2))();
     }
 }
 
@@ -155,18 +141,18 @@ if(window.innerWidth > 800) {
 indicatorsCount = Math.ceil(slides.length/itemsCount);
 
 for (let i = 0; i < indicatorsCount; i++) {
-    let node = document.createElement("input");
+    let node = document.createElement("div");
 
     node.setAttribute("class", "indicator");
     node.setAttribute("name", "indicator");
-    node.setAttribute("type", "radio");
-    node.setAttribute("data-slide", `${i}`);
+    node.innerHTML = `<span>${i+1}</span>`;
     node.addEventListener("click", setSlide(i));
-
+    node.setAttribute("checked", "false");
     indicatorsParent.appendChild(node);
 }
 
-indicators[0].checked = "true";
+indicators[0].setAttribute("checked", "true");
+indicators[0].setAttribute("data-state", "active");
 
 for (let i = 0; i < itemsCount; i++) {
     slides[i].setAttribute('data-state', 'active');
