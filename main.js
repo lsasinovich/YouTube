@@ -1,4 +1,31 @@
 /* Hiding carousele (set attribetes display:none and data-state: "")*/
+function showIndicators(num) {
+  if (indicators.length <= 4) {
+    for( var i = 0; i<indicators.length; i++)
+       indicators[i].style.display = "inline-block";
+     return;
+  }
+
+  if( num == 0 ) {
+    indicators[num].style.display = "inline-block";
+    indicators[num+1].style.display = "inline-block";
+    indicators[num+2].style.display = "inline-block";
+    indicators[num+3].style.display = "inline-block";
+  } else if (num == indicators.length-1) {
+    indicators[num].style.display = "inline-block";
+    indicators[num-1].style.display = "inline-block";
+    indicators[num-2].style.display = "inline-block";
+    indicators[num-3].style.display = "inline-block";
+  } else {
+    indicators[num].style.display = "inline-block";
+    indicators[num-1].style.display = "inline-block";
+    indicators[num+1].style.display = "inline-block";
+    if ( num == 1 ) 
+      indicators[num+2].style.display = "inline-block";
+    else  indicators[num-2].style.display = "inline-block";
+  }
+}
+
 function carouselHide() {
       for (var i = 0; i<slides.length; i++) {
             slides[i].setAttribute('data-state', '');
@@ -8,12 +35,15 @@ function carouselHide() {
         for (var i = 0; i < indicators.length; i++) {
             indicators[i].setAttribute('data-state', '');
             indicators[i].setAttribute("checked", "false");
+            indicators[i].style.display = 'none';
         }
 }
 
 function carouselShow(num) {
         indicators[num].setAttribute('data-state', 'active');
         indicators[num].setAttribute("checked", "true");
+
+        showIndicators(num);
 
         for (var i = 0; i < itemsCount; i++) {
           if (num*itemsCount + i < slides.length) {
@@ -44,6 +74,7 @@ function resize() {
           node.setAttribute("name", "indicator");
           node.innerHTML = `<span>${i+1}</span>`;
           node.setAttribute("checked", "false");
+          node.style.display = "none";
           node.addEventListener("click", setSlide(i));
 
           indicatorsParent.appendChild(node);
@@ -87,6 +118,7 @@ function resize() {
           node.setAttribute("name", "indicator");
           node.innerHTML = `<span>${i+1}</span>`;
           node.setAttribute("checked", "false")
+          node.style.display = "none";
           node.addEventListener("click", setSlide(i));
 
           indicatorsParent.appendChild(node);
@@ -147,13 +179,16 @@ for (let i = 0; i < indicatorsCount; i++) {
     node.setAttribute("name", "indicator");
     node.innerHTML = `<span>${i+1}</span>`;
     node.addEventListener("click", setSlide(i));
+    node.style.display = "none";
     node.setAttribute("checked", "false");
     indicatorsParent.appendChild(node);
 }
 
+showIndicators(0);
 indicators[0].setAttribute("checked", "true");
 indicators[0].setAttribute("data-state", "active");
 
 for (let i = 0; i < itemsCount; i++) {
-    slides[i].setAttribute('data-state', 'active');
+    if (slides[i] !== undefined)
+     slides[i].setAttribute('data-state', 'active');
 }
