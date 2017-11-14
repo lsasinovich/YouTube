@@ -1,0 +1,11 @@
+{
+  "name": "YouTube",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/lsasinovich/YouTube.git",
+  "author": "lsasinovich <liza_sasinovich@mail.ru>",
+  "license": "MIT",
+  "devDependencies": {
+    "gulp": "^3.9.1"
+  }
+}

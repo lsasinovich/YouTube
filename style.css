@@ -2,7 +2,8 @@ body {
   position: relative;
   height: 100%;
   margin-bottom: 0;
-  background: url("фон.jpg");
+  background: url('images/fon.jpg') no-repeat;
+  background-size: cover;
   display: flex;
   justify-content: center;
 }
