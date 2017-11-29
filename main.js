@@ -1,28 +1,30 @@
-/* Hiding carousele (set attribetes display:none and data-state: "")*/
+var INLINE_BLOCK = "inline-block";
+
+
 function showIndicators(num) {
   if (indicators.length <= 4) {
     for( var i = 0; i<indicators.length; i++)
-       indicators[i].style.display = "inline-block";
+       indicators[i].style.display = INLINE_BLOCK ;
      return;
   }
 
   if( num == 0 ) {
-    indicators[num].style.display = "inline-block";
-    indicators[num+1].style.display = "inline-block";
-    indicators[num+2].style.display = "inline-block";
-    indicators[num+3].style.display = "inline-block";
+    indicators[num].style.display = INLINE_BLOCK ;
+    indicators[num+1].style.display = INLINE_BLOCK ;
+    indicators[num+2].style.display = INLINE_BLOCK ;
+    indicators[num+3].style.display = INLINE_BLOCK ;
   } else if (num == indicators.length-1) {
-    indicators[num].style.display = "inline-block";
-    indicators[num-1].style.display = "inline-block";
-    indicators[num-2].style.display = "inline-block";
-    indicators[num-3].style.display = "inline-block";
+    indicators[num].style.display = INLINE_BLOCK ;
+    indicators[num-1].style.display = INLINE_BLOCK ;
+    indicators[num-2].style.display = INLINE_BLOCK ;
+    indicators[num-3].style.display = INLINE_BLOCK ;
   } else {
-    indicators[num].style.display = "inline-block";
-    indicators[num-1].style.display = "inline-block";
-    indicators[num+1].style.display = "inline-block";
+    indicators[num].style.display = INLINE_BLOCK ;
+    indicators[num-1].style.display = INLINE_BLOCK ;
+    indicators[num+1].style.display = INLINE_BLOCK ;
     if ( num == 1 ) 
-      indicators[num+2].style.display = "inline-block";
-    else  indicators[num-2].style.display = "inline-block";
+      indicators[num+2].style.display = INLINE_BLOCK ;
+    else  indicators[num-2].style.display = INLINE_BLOCK ;
   }
 }
 
@@ -39,9 +41,30 @@ function carouselHide() {
         }
 }
 
+function addIndicators(index) {
+    for (var i = 0; i< 4; i++) {
+        let newIndicator = document.createElement("div");
+
+        newIndicator.setAttribute("class", "indicator");
+        newIndicator.setAttribute("name", "indicator");
+        newIndicator.innerHTML = `<span>${index+1+i}</span>`;
+        newIndicator.setAttribute("checked", "false");
+        newIndicator.style.display = "none";
+        newIndicator.addEventListener("click", setSlide(index+i));
+        indicatorsCount++;
+
+        indicatorsParent.appendChild(newIndicator);
+    }
+}
+
 function carouselShow(num) {
         indicators[num].setAttribute('data-state', 'active');
         indicators[num].setAttribute("checked", "true");
+        console.log(num);
+        if (num === indicatorsCount-1) {
+            addIndicators(num + 1);
+
+        }
 
         showIndicators(num);
 
@@ -153,13 +176,12 @@ function resize() {
     }
 }
 
-function fillResultItems(elements) {
+function fillResultItems(elements, str) {
 
     [].forEach.call(slides, function(item, i) {
         var x = new XMLHttpRequest();
-        x.open('GET', 'https://www.googleapis.com/youtube/v3/videos?id=' + elements[i].id.videoId + '&key=AIzaSyDMK9IG4eBAXFomDmKD-rWIN-X5I72zCwM&part=snippet,statistics', false);
+        x.open('GET', 'https://www.googleapis.com/youtube/v3/videos?id=' + elements.items[i].id.videoId + '&key=AIzaSyDMK9IG4eBAXFomDmKD-rWIN-X5I72zCwM&part=snippet,statistics', false);
         x.send();
-
         var result =  JSON.parse(x.responseText).items[0];
 
         item.querySelector(".item-img").lastElementChild.src = result.snippet.thumbnails.medium.url;
@@ -168,7 +190,18 @@ function fillResultItems(elements) {
         item.querySelector(".item-author").lastElementChild.textContent = result.snippet.channelTitle;
         item.querySelector(".item-count-view").lastElementChild.textContent = result.statistics.viewCount;
         item.querySelector(".item-description").textContent = result.snippet.description;
+
     });
+
+}
+
+function getNextItems(elements, str) {
+    console.log(elements.nextPageToken);
+    var x = new XMLHttpRequest();
+    x.open('GET', ' https://www.googleapis.com/youtube/v3/search?key=AIzaSyDMK9IG4eBAXFomDmKD-rWIN-X5I72zCwM&type=video&part=snippet&maxResults=12&q=' + str + '&pageToken=' + elements.nextPageToken, false);
+    x.send();
+
+    return JSON.parse(x.responseText).items;
 }
 
 function request(event) {
@@ -177,18 +210,17 @@ function request(event) {
 
     if(str != "") {
         var x = new XMLHttpRequest();
-        x.open('GET', ' https://www.googleapis.com/youtube/v3/search?key=AIzaSyDMK9IG4eBAXFomDmKD-rWIN-X5I72zCwM&type=video&part=snippet&maxResults=15&q=' + str, false);
+        x.open('GET', ' https://www.googleapis.com/youtube/v3/search?key=AIzaSyDMK9IG4eBAXFomDmKD-rWIN-X5I72zCwM&type=video&part=snippet&maxResults=12&q=' + str, false);
         x.send();
-
         if (x.status != 200) {
             console.log( x.status + ': ' + x.statusText );
         } else {
-            var mas = JSON.parse(x.responseText).items;
+            var mas = JSON.parse(x.responseText);
 
-            if(mas.length === 0) {
+            if(mas.items.length === 0) {
                 console.log( "No such videos ");
             } else {
-                fillResultItems(mas);
+                fillResultItems(mas, str);
             }
         }
     }
