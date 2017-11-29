@@ -153,6 +153,55 @@ function resize() {
     }
 }
 
+function fillResultItems(elements) {
+
+    [].forEach.call(slides, function(item, i) {
+        var x = new XMLHttpRequest();
+        x.open('GET', 'https://www.googleapis.com/youtube/v3/videos?id=' + elements[i].id.videoId + '&key=AIzaSyDMK9IG4eBAXFomDmKD-rWIN-X5I72zCwM&part=snippet,statistics', false);
+        x.send();
+
+        var result =  JSON.parse(x.responseText).items[0];
+
+        item.querySelector(".item-img").lastElementChild.src = result.snippet.thumbnails.medium.url;
+        item.querySelector(".item-upload-date").lastElementChild.textContent = result.snippet.publishedAt.slice(0, 10);
+        item.querySelector(".item-name").textContent = result.snippet.title;
+        item.querySelector(".item-author").lastElementChild.textContent = result.snippet.channelTitle;
+        item.querySelector(".item-count-view").lastElementChild.textContent = result.statistics.viewCount;
+        item.querySelector(".item-description").textContent = result.snippet.description;
+    });
+}
+
+function request(event) {
+    var input = document.querySelector('.searchTerm');
+    var str = input.value;
+
+    if(str != "") {
+        var x = new XMLHttpRequest();
+        x.open('GET', ' https://www.googleapis.com/youtube/v3/search?key=AIzaSyDMK9IG4eBAXFomDmKD-rWIN-X5I72zCwM&type=video&part=snippet&maxResults=15&q=' + str, false);
+        x.send();
+
+        if (x.status != 200) {
+            console.log( x.status + ': ' + x.statusText );
+        } else {
+            var mas = JSON.parse(x.responseText).items;
+
+            if(mas.length === 0) {
+                console.log( "No such videos ");
+            } else {
+                fillResultItems(mas);
+            }
+        }
+    }
+}
+
+var searchButton = document.querySelector('.searchButton');
+var searchInput = document.querySelector('.searchTerm');
+searchInput.onkeypress = function(e){
+    if(e.keyCode==13){
+        request();
+    }
+};
+searchButton.addEventListener("click", request);
 var carousel = document.getElementById('carousel');
 var slides = carousel.getElementsByClassName('result-item');
 var indicators = carousel.getElementsByClassName('indicator');
