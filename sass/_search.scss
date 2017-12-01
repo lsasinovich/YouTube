@@ -1,3 +1,5 @@
+@import "_variables.scss";
+
 .search-container {
   background-color: $content-background;
   display: flex;
@@ -18,48 +20,6 @@
   margin-right: 5px;
   box-shadow: 2px 2px 3px #0f0e0e;
   font-size: 20px;
-}
-
-.searchTerm:focus{
-  color: #ffffff;
-}
-
-.searchButton {
-  flex: 1;
-  border: 1px solid #0f0e0e;
-  background: #771213;
-  background: radial-gradient(circle, #771213, #140306);
-  text-align: center;
-  color: #ffffff;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 20px;
-  box-shadow: 2px 2px 3px #0f0e0e;
-}
-.search-container {
-  background-color: #291c1cd9;
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  padding: 0 10%;
-  box-sizing: border-box;
-  margin: 25px 0;
-  flex-grow: 1;
-  position: relative;
-}
-
-.searchTerm {
-  flex: 10;
-  font-family: Comic Sans MS;
-  border: 1px solid #0f0e0e;
-  background: radial-gradient(ellipse, #111, #080808);
-  font-size: 20px;
-  padding: 5px;
-  border-radius: 10px;
-  outline: none;
-  color: rgb(255, 255, 255);
-  margin-right: 5px;
-  box-shadow: 2px 2px 3px #0f0e0e;
 }
 
 .searchTerm:focus{

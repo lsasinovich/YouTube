@@ -6,12 +6,21 @@
   "author": "lsasinovich <liza_sasinovich@mail.ru>",
   "license": "MIT",
   "devDependencies": {
-    "gulp": "^3.9.1"
+    "babel-install": "2.1.0",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^7.0.0"
   },
   "scripts": {
-    "dev": "gulp"
+    "dev": "gulp",
+    "babel": "babel src -d dist/src --presets es2015",
+    "watch": "babel src -d dist/src --presets es2015 -w"
   },
   "dependencies": {
+    "babel": "^6.23.0",
+    "babel-cli": "^6.26.0",
+    "babel-plugin-transform-es2015-modules-umd": "^6.24.1",
+    "babel-preset-env": "^1.6.1",
+    "babel-register": "^6.26.0",
     "browser-sync": "^2.18.13",
     "gulp-concat": "^2.6.1",
     "gulp-inject": "^4.3.0",

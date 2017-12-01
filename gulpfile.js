@@ -10,7 +10,8 @@ var gulp = require('gulp'),
     reload = browserSync.reload,
     inject = require('gulp-inject'),
     browserSync = require('browser-sync').create(),
-    concat = require('gulp-concat');
+    concat = require('gulp-concat'),
+    babel = require('gulp-babel');
 
 gulp.task('sass', function () {
     return gulp.src('./sass/**/*.scss')
@@ -48,7 +49,16 @@ gulp.task('js', function () {
         .pipe(reload({stream: true}));
 });
 
-gulp.task('build', ['sass', 'js', 'browser-sync', 'watch']);
+
+gulp.task('babel', () =>
+    gulp.src('./*.js')
+        .pipe(babel({
+            presets: ['env']
+        }))
+        .pipe(gulp.dest('dist/src'))
+);
+
+gulp.task('build', ['sass', 'js', 'babel', 'browser-sync', 'watch']);
 
 
 gulp.task('default', function(){
@@ -56,8 +66,9 @@ gulp.task('default', function(){
 });
 
 gulp.task('index', function () {
-    return gulp.src('./index.html')
+    return gulp.src('./*.html')
         .pipe(inject(gulp.src('./*.js', {read: false}), {relative: true}))
         .pipe(gulp.dest('./src'));
 });
+
 
