@@ -1,0 +1,16 @@
+body {
+  background: url("../../images/fon.jpg") no-repeat;
+  background-size: cover; }
+
+.header {
+  height: 400px;
+  width: 1000px;
+  margin: 10px 100px 50px 100px;
+  background: url("../../images/youtube-stream-ripping-site-shutting-down_995t%20(2).jpg") no-repeat;
+  background-size: cover; }
+
+.content {
+  width: 1200px;
+  margin: 20px auto;
+  background-color: rgba(119, 18, 19, 0.34);
+  box-shadow: 3px 3px 5px #111; }

@@ -7,5 +7,18 @@
   "license": "MIT",
   "devDependencies": {
     "gulp": "^3.9.1"
+  },
+  "scripts": {
+    "dev": "gulp"
+  },
+  "dependencies": {
+    "browser-sync": "^2.18.13",
+    "gulp-concat": "^2.6.1",
+    "gulp-inject": "^4.3.0",
+    "gulp-rigger": "^0.5.8",
+    "gulp-sass": "^3.1.0",
+    "gulp-sourcemaps": "^2.6.1",
+    "gulp-uglify": "^3.0.0",
+    "gulp-watch": "^4.3.11"
   }
 }

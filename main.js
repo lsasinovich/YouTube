@@ -1,5 +1,19 @@
 var INLINE_BLOCK = "inline-block";
+var INDICATOR = "indicator";
+var INDICATORS = "indicators";
 
+function createIndicator(index, i, indicatorsParent) {
+    let newIndicator = document.createElement("div");
+
+    newIndicator.setAttribute("class", INDICATOR);
+    newIndicator.setAttribute("name", INDICATOR);
+    newIndicator.innerHTML = `<span>${index+1+i}</span>`;
+    newIndicator.setAttribute("checked", "false");
+    newIndicator.style.display = "none";
+    newIndicator.addEventListener("click", setSlide(index+i));
+
+    indicatorsParent.appendChild(newIndicator);
+}
 
 function showIndicators(num) {
   if (indicators.length <= 4) {
@@ -42,19 +56,10 @@ function carouselHide() {
 }
 
 function addIndicators(index) {
-    for (var i = 0; i< 4; i++) {
-        let newIndicator = document.createElement("div");
-
-        newIndicator.setAttribute("class", "indicator");
-        newIndicator.setAttribute("name", "indicator");
-        newIndicator.innerHTML = `<span>${index+1+i}</span>`;
-        newIndicator.setAttribute("checked", "false");
-        newIndicator.style.display = "none";
-        newIndicator.addEventListener("click", setSlide(index+i));
-        indicatorsCount++;
-
-        indicatorsParent.appendChild(newIndicator);
+    for (var i = 0; i < 4; i++) {
+        createIndicator(index, i, indicatorsParent);
     }
+    indicatorsCount = indicators.length;
 }
 
 function carouselShow(num) {
@@ -63,7 +68,7 @@ function carouselShow(num) {
         console.log(num);
         if (num === indicatorsCount-1) {
             addIndicators(num + 1);
-
+            getNextItems(elements, str);
         }
 
         showIndicators(num);
@@ -71,7 +76,7 @@ function carouselShow(num) {
         for (var i = 0; i < itemsCount; i++) {
           if (num*itemsCount + i < slides.length) {
             slides[num*itemsCount + i].setAttribute('data-state', 'active');
-            slides[num*itemsCount + i].style.display = 'inline-block';
+            slides[num*itemsCount + i].style.display = INLINE_BLOCK;
           }
         }
 }
@@ -91,16 +96,7 @@ function resize() {
       itemsCount = 2;
 
     for (let i = indicatorsCount; i < Math.round(slides.length/2); i++) {
-          let node = document.createElement("div");
-
-          node.setAttribute("class", "indicator");
-          node.setAttribute("name", "indicator");
-          node.innerHTML = `<span>${i+1}</span>`;
-          node.setAttribute("checked", "false");
-          node.style.display = "none";
-          node.addEventListener("click", setSlide(i));
-
-          indicatorsParent.appendChild(node);
+        createIndicator(i, 0, indicatorsParent);
       }
 
     indicatorsCount = indicators.length;
@@ -134,17 +130,7 @@ function resize() {
       itemsCount = 1;
       let num;
         for (let i = indicatorsCount; i < slides.length; i++) {
-
-            let node = document.createElement("div");
-
-          node.setAttribute("class", "indicator");
-          node.setAttribute("name", "indicator");
-          node.innerHTML = `<span>${i+1}</span>`;
-          node.setAttribute("checked", "false")
-          node.style.display = "none";
-          node.addEventListener("click", setSlide(i));
-
-          indicatorsParent.appendChild(node);
+            createIndicator(i, 0, indicatorsParent);
         }
 
         indicatorsCount = indicators.length;
@@ -176,7 +162,7 @@ function resize() {
     }
 }
 
-function fillResultItems(elements, str) {
+function fillResultItems(elements) {
 
     [].forEach.call(slides, function(item, i) {
         var x = new XMLHttpRequest();
@@ -196,8 +182,7 @@ function fillResultItems(elements, str) {
 }
 
 function getNextItems(elements, str) {
-    console.log(elements.nextPageToken);
-    var x = new XMLHttpRequest();
+    console.log(elements.nextPageToken);    var x = new XMLHttpRequest();
     x.open('GET', ' https://www.googleapis.com/youtube/v3/search?key=AIzaSyDMK9IG4eBAXFomDmKD-rWIN-X5I72zCwM&type=video&part=snippet&maxResults=12&q=' + str + '&pageToken=' + elements.nextPageToken, false);
     x.send();
 
@@ -206,7 +191,7 @@ function getNextItems(elements, str) {
 
 function request(event) {
     var input = document.querySelector('.searchTerm');
-    var str = input.value;
+    str = input.value;
 
     if(str != "") {
         var x = new XMLHttpRequest();
@@ -215,17 +200,18 @@ function request(event) {
         if (x.status != 200) {
             console.log( x.status + ': ' + x.statusText );
         } else {
-            var mas = JSON.parse(x.responseText);
+           elements = JSON.parse(x.responseText);
 
-            if(mas.items.length === 0) {
+            if(elements.items.length === 0) {
                 console.log( "No such videos ");
             } else {
-                fillResultItems(mas, str);
+                fillResultItems(elements, str);
             }
         }
     }
 }
-
+var elements;
+var str = "";
 var searchButton = document.querySelector('.searchButton');
 var searchInput = document.querySelector('.searchTerm');
 searchInput.onkeypress = function(e){
@@ -236,8 +222,8 @@ searchInput.onkeypress = function(e){
 searchButton.addEventListener("click", request);
 var carousel = document.getElementById('carousel');
 var slides = carousel.getElementsByClassName('result-item');
-var indicators = carousel.getElementsByClassName('indicator');
-var indicatorsParent = carousel.querySelector('.indicators');
+var indicators = carousel.getElementsByClassName(INDICATOR);
+var indicatorsParent = carousel.querySelector('.' + INDICATORS);
 window.onresize = resize;
 
 var itemsCount;
@@ -254,15 +240,7 @@ if(window.innerWidth > 800) {
 indicatorsCount = Math.ceil(slides.length/itemsCount);
 
 for (let i = 0; i < indicatorsCount; i++) {
-    let node = document.createElement("div");
-
-    node.setAttribute("class", "indicator");
-    node.setAttribute("name", "indicator");
-    node.innerHTML = `<span>${i+1}</span>`;
-    node.addEventListener("click", setSlide(i));
-    node.style.display = "none";
-    node.setAttribute("checked", "false");
-    indicatorsParent.appendChild(node);
+    createIndicator(i, 0, indicatorsParent);
 }
 
 showIndicators(0);
