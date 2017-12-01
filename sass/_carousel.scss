@@ -1,0 +1,14 @@
+.carousel {
+  height: 400px;
+  width: 1200px;
+  word-wrap: break-word;
+  overflow: hidden;
+  background-color: white;
+}
+
+.carousel-item {
+  height: 400px;
+  width: 250px;
+  display: inline-block;
+  margin: 0 50px;
+}

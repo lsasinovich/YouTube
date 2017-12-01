@@ -1,35 +1,35 @@
 @import "_variables.scss";
 
 .search-container {
-  background-color: $content-background;
-  display: flex;
-  justify-content: center;
+  background-color: rgba(0,0,0,0);
   box-sizing: border-box;
   margin: 25px 0;
 }
 
 .search-input {
-  flex: 10;
-  font-family: Verdana;
+  width: 700px;
+  margin: 0 5px 0 200px;
   border: 1px solid #0f0e0e;
   background: radial-gradient(ellipse, #111, #080808);
   padding: 5px;
   border-radius: 10px;
   outline: none;
-  color: rgb(255, 255, 255);
-  margin-right: 5px;
   box-shadow: 2px 2px 3px #0f0e0e;
+
+  font-family: Verdana;
   font-size: 20px;
+  color: rgb(255, 255, 255);
 }
 
 .searchTerm:focus{
   color: #ffffff;
 }
 
-.searchButton {
-  flex: 1;
+.search-button {
+  height: 38px;
+  width: 38px;
   border: 1px solid #0f0e0e;
-  background: #771213;
+  background: $search-button-background;
   background: radial-gradient(circle, #771213, #140306);
   text-align: center;
   color: #ffffff;
