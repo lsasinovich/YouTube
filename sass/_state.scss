@@ -1,0 +1,32 @@
+.fadeCarousel {
+  white-space: normal;
+}
+
+.fadeCarouselElement {
+  opacity: 0;
+  position: absolute;
+  transition-property: opacity;
+  transition-duration: 0.5s;
+}
+
+.fadeCarouselActiveElement {
+  opacity: 1;
+  position: absolute;
+  transition-property: opacity;
+  transition-duration: 0.5s;
+  z-index: 1;
+}
+
+.defaultCarouselElement {
+  position: relative;
+  transition-property: margin-left;
+  transition-duration: 0.5s;
+}
+
+.defaultCarousel {
+  white-space: nowrap;
+}
+
+.indicators-item[active="true"] {
+  background-color: #771213;
+}
