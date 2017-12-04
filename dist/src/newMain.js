@@ -1,5 +1,17 @@
 "use strict";
 
+var FADE = "fade"; /** @constant */
+var NORMAL = "default"; /** @constant */
+var FADE_CAROUSEL_ACTIVE_ELEMENT = "fadeCarouselActiveElement"; /** @constant */
+var FADE_CAROUSEL_ELEMENT = "fadeCarouselElement"; /** @constant */
+var FADE_CAROUSEL = "fadeCarousel"; /** @constant */
+var DEFAULT_CAROUSEL = "defaultCarousel"; /** @constant */
+var DEFAULT_CAROUSEL_ELEMENT = "defaultCarouselElement"; /** @constant */
+var CAROUSEL_ITEM = ".carousel-item"; /** @constant */
+var INDICATORS = ".indicators"; /** @constant */
+var INDICATOR = "indicators-item"; /** @constant */
+var COMPUTED_MARGIN = 23; /** @constant */
+
 function clickIndicator(index) {
     for (var i = 0; i < this.allIndicators.length; i++) {
         this.allIndicators[i].setAttribute("active", "false");
@@ -11,90 +23,94 @@ function clickIndicator(index) {
     switchSlide.bind(this, index)();
 }
 
-function Carousel(carouselProperties) {
-    var FADE = "fade"; /** @constant */
-    var NORMAL = "default"; /** @constant */
-    var SLIDES = carouselProperties.slides; /** @constant */
-    var FADE_CAROUSEL_ACTIVE_ELEMENT = "fadeCarouselActiveElement"; /** @constant */
-    var FADE_CAROUSEL_ELEMENT = "fadeCarouselElement"; /** @constant */
-    var FADE_CAROUSEL = "fadeCarousel"; /** @constant */
-    var DEFAULT_CAROUSEL = "defaultCarousel"; /** @constant */
-    var DEFAULT_CAROUSEL_ELEMENT = "defaultCarouselElement"; /** @constant */
-    var CAROUSEL_ITEM = ".carousel-item"; /** @constant */
-    var INDICATORS = ".indicators"; /** @constant */
-    var INDICATOR = "indicators-item"; /** @constant */
+function switchSlide(index) {
+    if (index === this.slideCount) {
+        if (this.animationType === FADE) {
+            this.allCarouselImage[this.slideIndex - 1].classList.add(FADE_CAROUSEL_ACTIVE_ELEMENT);
+        } else {
+            this.firstCarouselImage.style.marginLeft = COMPUTED_MARGIN + -(index - 1) * (this.width + 5) + "px";
+        }
+    } else {
+        if (index === -1) {
+            if (this.animationType === FADE) {
+                this.allCarouselImage[0].classList.add(FADE_CAROUSEL_ACTIVE_ELEMENT);
+            } else {
+                this.firstCarouselImage.style.marginLeft = 0 + "px";
+            }
+        } else {
+            if (this.animationType === FADE) {
+                this.allCarouselImage[index].classList.add(FADE_CAROUSEL_ACTIVE_ELEMENT);
+            } else {
+                this.firstCarouselImage.style.marginLeft = COMPUTED_MARGIN + -index * (this.width + 5) + "px";
+            }
+        }
+    }
+}
 
-    this.carousel = document.querySelector(carouselProperties.id);
-    //this.firstCarouselImage = this.carousel.querySelector(CAROUSEL_ITEM);
-    //this.allCarouselImage = this.carousel.querySelectorAll(CAROUSEL_ITEM );
-    this.width = this.carousel.offsetWidth;
-    //this.slideCount = this.allCarouselImage.length;
-    // this.indicators = this.carousel.querySelector(INDICATORS);
-    this.timerTime = carouselProperties.time;
-    this.animationType = carouselProperties.animation || NORMAL;
+function createCarouselItem() {
+    var item = document.createElement("div");
+    item.setAttribute("class", "carousel-item");
+
+    var image = document.createElement("div");
+    image.setAttribute("class", "item-image");
+
+    var name = document.createElement("div");
+    name.setAttribute("class", "item-name");
+
+    var author = document.createElement("div");
+    author.setAttribute("class", "item-author");
+    var authorI = document.createElement("i");
+    var authorP = document.createElement("p");
+    authorI.setAttribute("class", "fa fa-female fa-2x");
+    authorI.setAttribute("aria-hidden", "true");
+
+    author.appendChild(authorI);
+    author.appendChild(authorP);
+
+    var date = document.createElement("div");
+    date.setAttribute("class", "item-upload-date");
+
+    var dateI = document.createElement("i");
+    var dateP = document.createElement("p");
+    dateI.setAttribute("class", "fa fa-calendar fa-2x");
+    dateI.setAttribute("aria-hidden", "true");
+
+    date.appendChild(dateI);
+    date.appendChild(dateP);
+
+    var view = document.createElement("div");
+    view.setAttribute("class", "item-count-view");
+
+    var viewI = document.createElement("i");
+    var viewP = document.createElement("p");
+    viewI.setAttribute("class", "fa fa-eye fa-2x");
+    viewI.setAttribute("aria-hidden", "true");
+
+    view.appendChild(viewI);
+    view.appendChild(viewP);
+
+    var description = document.createElement("div");
+    description.setAttribute("class", "item-description");
+
+    item.appendChild(image);
+    item.appendChild(name);
+    item.appendChild(author);
+    item.appendChild(date);
+    item.appendChild(view);
+    item.appendChild(description);
+
+    return item;
+}
+
+function Carousel() {
     this.slideIndex = 0;
 
-    var COMPUTED_MARGIN = 23;
     var startingX = void 0;
     var endingX = void 0;
     /**Add background-image to our carousel items, text and link to buttons
      *
      * @param {array} SLIDES
      */
-    this.createCarouselItem = function () {
-        var item = document.createElement("div");
-        item.setAttribute("class", "carousel-item");
-
-        var image = document.createElement("div");
-        image.setAttribute("class", "item-image");
-
-        var name = document.createElement("div");
-        name.setAttribute("class", "item-name");
-
-        var author = document.createElement("div");
-        author.setAttribute("class", "item-author");
-        var authorI = document.createElement("i");
-        var authorP = document.createElement("p");
-        authorI.setAttribute("class", "fa fa-female fa-2x");
-        authorI.setAttribute("aria-hidden", "true");
-
-        author.appendChild(authorI);
-        author.appendChild(authorP);
-
-        var date = document.createElement("div");
-        date.setAttribute("class", "item-upload-date");
-
-        var dateI = document.createElement("i");
-        var dateP = document.createElement("p");
-        dateI.setAttribute("class", "fa fa-calendar fa-2x");
-        dateI.setAttribute("aria-hidden", "true");
-
-        date.appendChild(dateI);
-        date.appendChild(dateP);
-
-        var view = document.createElement("div");
-        view.setAttribute("class", "item-count-view");
-
-        var viewI = document.createElement("i");
-        var viewP = document.createElement("p");
-        viewI.setAttribute("class", "fa fa-eye fa-2x");
-        viewI.setAttribute("aria-hidden", "true");
-
-        view.appendChild(viewI);
-        view.appendChild(viewP);
-
-        var description = document.createElement("div");
-        description.setAttribute("class", "item-description");
-
-        item.appendChild(image);
-        item.appendChild(name);
-        item.appendChild(author);
-        item.appendChild(date);
-        item.appendChild(view);
-        item.appendChild(description);
-
-        return item;
-    };
 
     this.setSlides = function (SLIDES) {
         for (var i = 0; i < SLIDES.length; i++) {
@@ -308,29 +324,6 @@ function Carousel(carouselProperties) {
      *
      * @param {number} index -index of element, which need to be shown
      */
-    function switchSlide(index) {
-        if (index === this.slideCount) {
-            if (this.animationType === FADE) {
-                this.allCarouselImage[this.slideIndex - 1].classList.add(FADE_CAROUSEL_ACTIVE_ELEMENT);
-            } else {
-                this.firstCarouselImage.style.marginLeft = COMPUTED_MARGIN + -(index - 1) * (this.width + 5) + "px";
-            }
-        } else {
-            if (index === -1) {
-                if (this.animationType === FADE) {
-                    this.allCarouselImage[0].classList.add(FADE_CAROUSEL_ACTIVE_ELEMENT);
-                } else {
-                    this.firstCarouselImage.style.marginLeft = 0 + "px";
-                }
-            } else {
-                if (this.animationType === FADE) {
-                    this.allCarouselImage[index].classList.add(FADE_CAROUSEL_ACTIVE_ELEMENT);
-                } else {
-                    this.firstCarouselImage.style.marginLeft = COMPUTED_MARGIN + -index * (this.width + 5) + "px";
-                }
-            }
-        }
-    }
 
     this.setSlides(SLIDES);
     this.setIndicators();
@@ -391,19 +384,21 @@ function fillResultItems(car, slides) {
         element.querySelector(".item-description").innerText = result.snippet.description;
         car.carousel.appendChild(element);
     });
+    car.allCarouselImage = car.carousel.children;
     for (var i = 0; i < car.indicators.length; i++) {
         car.indicators.removeChild(car.indicators.firstElementChild);
     }
+    console.log(car.indicators);
     for (var _i = 0; _i < Math.round(car.allCarouselImage.length / 4); _i++) {
         var newIndicator = document.createElement("div");
 
-        newIndicator.setAttribute("class", ".indicators-item");
-        newIndicator.setAttribute("name", ".indicators-item");
+        newIndicator.setAttribute("class", "indicators-item");
+        newIndicator.setAttribute("name", "indicators-item");
         newIndicator.innerHTML = "" + (1 + _i);
         newIndicator.setAttribute("checked", "false");
         newIndicator.addEventListener("click", clickIndicator.bind(car, _i));
 
-        car.indicators.appendChild(newIndicator);
+        car.carousel.nextElementSibling.appendChild(newIndicator);
     }
     car.allIndicators = car.indicators.children;
     car.allIndicators[0].setAttribute("active", "true");
@@ -440,8 +435,8 @@ function fillResultItems(car, slides) {
         views: "452556",
         description: "sdkgushdiguhsdigh"
     }];
-    var carousel = new Carousel({ id: "#carousel", time: "", animation: "normal", slides: SLIDES });
 
+    var carousel = document.querySelector("#carousel");
     var searchButton = document.querySelector('.search-button');
     var searchInput = document.querySelector('.search-input');
     searchButton.addEventListener("click", request.bind(null, carousel));
